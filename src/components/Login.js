@@ -14,10 +14,7 @@ const LoginPage = () => {
         e.preventDefault()
         if (validateFields()) {
             return
-        }else{
-            console.log(userData)
-            setErrors(state=>({...state,short:'',emailVal:''}))
-        }
+        } 
     };
 
     const validateFields = () => {
