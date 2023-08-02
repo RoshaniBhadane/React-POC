@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Container, TextField, Button, TextFieldfrom, FormControlLabel, Checkbox, Box, Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import { validateEmail, validatePassword, validateCredentials, setUserSession, getUserSession } from '../helper'
+import { Container, TextField, Button, Box, Typography, Alert } from "@mui/material";
+import { AuthenticationContext } from './Authentication';
 
 const LoginPage = () => {
     const [userData, setUserData] = useState({
@@ -8,32 +11,41 @@ const LoginPage = () => {
     })
     const [errors, setErrors] = useState({
         short: '',
-        emailVal: ''
+        emailVal: '',
+        authErr: ''
     })
+    const navigate = useNavigate();
+
+    const { login } = useContext(AuthenticationContext);
+  
     const handleSubmit = (e) => {
         e.preventDefault()
         if (validateFields()) {
             return
-        } 
+        } else {
+            if (validateCredentials(userData.email, userData.password)) {
+                login(true)
+                navigate('/dashboard')
+            }
+            else { setErrors(state => ({ ...state, authErr: 'Authentication Failed' })) }
+        }
     };
 
     const validateFields = () => {
-        let regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
         let error = false
-        if (userData.email && regex.test(userData.email) === false) {
-            error = true
+        if (validateEmail(userData.email)) {
             setErrors(state => ({ ...state, emailVal: 'Invalid email' }))
-        }
-        if (userData.password && userData.password.length < 5) {
             error = true
+        } else { setErrors(state => ({ ...state, emailVal: '' })) }
+        if (validatePassword(userData.password)) {
             setErrors(state => ({ ...state, short: 'Password must contain at least 5 characters' }))
-        }
+            error = true
+        } else { setErrors(state => ({ ...state, short: '' })) }
         return error
     }
 
     const handleChange = e => {
         const value = e.target.value
-        console.log(value, "value");
         setUserData({
             ...userData,
             [e.target.name]: value,
@@ -80,10 +92,7 @@ const LoginPage = () => {
                         helperText={errors.short}
                         onChange={handleChange}
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
+                    {errors.authErr && <Alert severity="error">{errors.authErr}</Alert>}
                     <Button
                         type="submit"
                         fullWidth

@@ -1,13 +1,22 @@
+import React,{useContext} from 'react'
 import './App.css';
-import {Container} from '@mui/material';
+import { BrowserRouter as Router, Routes, Route,redirect } from "react-router-dom";
 import LoginPage from './components/Login';
+import Dashboard from './components/Dashboard'
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <Container component="main" maxWidth="sm">
-      <LoginPage/>
-    </Container>
+    <Router>
+      <Routes>
+        <Route  path="/" element={<LoginPage/>} />
+        <Route exact path='/' element={<ProtectedRoute/>}>
+            <Route exact path='/dashboard' element={<Dashboard/>}/>
+          </Route>
+      </Routes>
+    </Router>
   );
 }
+
 
 export default App;
