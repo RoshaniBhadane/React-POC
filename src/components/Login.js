@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { validateEmail, validatePassword, validateCredentials, setUserSession, getUserSession } from '../helper'
+import { validateEmail, validatePassword, validateCredentials } from '../helper'
 import { Container, TextField, Button, Box, Typography, Alert } from "@mui/material";
 import { AuthenticationContext } from './Authentication';
 
@@ -17,7 +17,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const { login } = useContext(AuthenticationContext);
-  
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (validateFields()) {
