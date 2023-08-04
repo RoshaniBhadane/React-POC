@@ -5,7 +5,7 @@ import { employeeData } from '../employeeData'
 import BarChartComp from './BarChartComp'
 import LineChartComp from "./LineChartComp";
 import AreaChartComp from "./AreaChartComp";
-import PieChartComp from "./PieChartComp";
+import RadarChartComp from "./RadarChartComp";
 const GridWrapper = () => {
 
   const layout = [
@@ -32,7 +32,7 @@ const GridWrapper = () => {
         <AreaChartComp data={employeeData} />
       </Box>
       <Box key={"d"} style={{ color: "white", backgroundColor: "white", border: "1px solid white" }}>
-        <PieChartComp data={employeeData} />
+        <RadarChartComp data={employeeData} />
       </Box>
     </GridLayout>
   );
